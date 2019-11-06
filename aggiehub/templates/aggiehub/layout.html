@@ -10,6 +10,9 @@
 <body>
 <div class="navbar">
     <a href="{% url 'home' %}" class="navbar-brand">Home</a>
+    {% if user != None %}
+        <a href="{% url 'logout' %}" class="navbar-brand">Logout</a>
+    {% endif %}
 </div>
 
 <div class="body-content">
