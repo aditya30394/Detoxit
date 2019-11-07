@@ -4,4 +4,9 @@ Home
 {% endblock %}
 {% block content %}
 Hello {{user.name}}
+<ul>
+    {% for post in user.post_set.all %}
+        <li>{{ post.text }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}
