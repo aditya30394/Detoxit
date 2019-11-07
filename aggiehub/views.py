@@ -10,7 +10,8 @@ user = None
 def home(request):
     if user is None:
         return redirect("login")
-    return render(request, "aggiehub/home.html", {"user": user})
+    posts = user.post_set.order_by('-id')
+    return render(request, "aggiehub/home.html", {"user": user, "posts": posts})
 
 
 def login(request):
