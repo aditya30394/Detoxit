@@ -9,4 +9,9 @@ Hello {{user.name}}
         <li>{{ post.text }}</li>
     {% endfor %}
 </ul>
+<form method="POST" class="login-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="save btn btn-default">Post</button>
+</form>
 {% endblock %}
