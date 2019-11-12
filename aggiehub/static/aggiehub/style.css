@@ -25,3 +25,11 @@
     padding: 5px;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+.row {
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+}

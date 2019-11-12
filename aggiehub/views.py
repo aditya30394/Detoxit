@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 
 from aggiehub.forms import LoginForm, PostForm
@@ -20,7 +20,8 @@ def home(request):
             return redirect("home")
     else:
         posts = user.post_set.order_by('-id')
-        context = {"form": form, "user": user, "posts": posts}
+        claims = user.claim_set
+        context = {"form": form, "user": user, "posts": posts, "claims": claims}
         return render(request, "aggiehub/home.html", context)
 
 
@@ -45,3 +46,11 @@ def login(request):
 def logout(request):
     user = None
     return redirect("login")
+
+
+# def validate_username(request):
+#     username = request.GET.get('username', None)
+#     data = {
+#         'is_taken': True
+#     }
+#     return JsonResponse(data)

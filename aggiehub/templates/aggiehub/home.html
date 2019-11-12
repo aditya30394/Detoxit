@@ -4,14 +4,26 @@ Home
 {% endblock %}
 {% block content %}
 Hello {{user.name}}
-<ul>
-    {% for post in posts %}
-        <li>{{ post.text }}</li>
-    {% endfor %}
-</ul>
+<div class="row">
+    <div class="column">
+        <ul>
+            {% for post in posts %}
+                <li>{{ post.text }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="column">
+        <h> Claims </h>
+        <ul>
+            {% for claim in claims %}
+                <li>Claim for "{{ claim.post }}"</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 <form method="POST" class="login-form">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form }}
     <button type="submit" class="save btn btn-default">Post</button>
 </form>
 {% endblock %}
