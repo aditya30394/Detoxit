@@ -6,15 +6,23 @@ Home
 Hello {{user.name}}
 <div class="row">
     <div class="column">
-        <ul>
+        <ul id="posts">
             {% for post in posts %}
-                <li>{{ post.text }}</li>
+                <li>
+                    {{ post.text }} 
+                    <br> 
+                    <b>-{{post.user}}</b>
+                    {% if user == post.user %}
+                        <a id="{{ post.id}}" class="removeOrClaim" href="http://www.google.com">remove</a> </li>
+                    {% else %}
+                        <a id="{{ post.id}}" class="removeOrClaim" href="http://www.google.com">claim</a> </li>
+                    {% endif %}
             {% endfor %}
         </ul>
     </div>
     <div class="column">
         <h> Claims </h>
-        <ul>
+        <ul id="claims">
             {% for claim in claims %}
                 <li>Claim for "{{ claim.post }}"</li>
             {% endfor %}

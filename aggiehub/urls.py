@@ -7,7 +7,8 @@ urlpatterns = [
     path("", views.login, name="login"),
     path("home/", views.home, name="home"),
     path("logout/", views.logout, name="logout"),
-    # path("ajax/validate_username/", views.validate_username, name='validate_username'),
+    path("ajax/delete/", views.delete_post, name='delete_post'),
+    path("ajax/claim/", views.claim_post, name='claim_post'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
