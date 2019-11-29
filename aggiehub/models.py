@@ -15,14 +15,21 @@ class Post(models.Model):
 
     def __str__(self):
         return self.text
+    
+    def isToxic(self):
+        return True if self.toxic.score > 0.5 else False
 
 
 class Toxic(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.OneToOneField(
+        Post,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
     score = models.FloatField(default=None)
 
     def __str__(self):
-        return "'{self.post}' has a toxocity score of '{self.score}'"
+        return "'{}' has a toxicity score of '{}'".format(self.post, self.score)
 
     def isToxic(self):
         return True if self.score > 0.5 else False
@@ -39,3 +46,4 @@ class Survey(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     SCORE_CHOICES = zip(range(1, 6), range(1, 6))
     score = models.IntegerField(choices=SCORE_CHOICES, blank=True)
+    is_completed = models.BooleanField(default=False)

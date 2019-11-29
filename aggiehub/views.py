@@ -6,7 +6,6 @@ from aggiehub.models import User, Post
 
 user = None
 
-
 def home(request):
     if user is None:
         return redirect("login")
@@ -21,7 +20,9 @@ def home(request):
     else:
         posts = Post.objects.order_by('-id')
         claims = user.claim_set.all()
-        context = {"form": form, "user": user, "posts": posts, "claims": claims}
+        surveys = user.survey_set.all()
+        get_notifications()
+        context = {"form": form, "user": user, "posts": posts, "claims": claims, "surveys":surveys}
         return render(request, "aggiehub/home.html", context)
 
 
@@ -34,13 +35,12 @@ def login(request):
             email = form.save(commit=False).email
             try:
                 user = User.objects.get(email=email)
+                return redirect("home")
             except User.DoesNotExist:
                 context = {"form": LoginForm(None), "user": user}
                 return render(request, "aggiehub/login.html", context)
-            return redirect("home")
-    else:
-        context = {"form": form, "user": user}
-        return render(request, "aggiehub/login.html", context)
+    context = {"form": form, "user": user}
+    return render(request, "aggiehub/login.html", context)
 
 
 def logout(request):
@@ -49,8 +49,8 @@ def logout(request):
 
 
 def delete_post(request):
-    id = request.GET.get('id', None)
-    post = Post.objects.get(pk=id)
+    post_id = request.GET.get('id', None)
+    post = Post.objects.get(pk=post_id)
     post.delete()
     data = {
         'success': True
@@ -59,8 +59,8 @@ def delete_post(request):
 
 
 def claim_post(request):
-    id = request.GET.get('id', None)
-    post = Post.objects.get(pk=id)
+    claim_id = request.GET.get('id', None)
+    post = Post.objects.get(pk=claim_id)
     exists = True
 
     if not post.claim_set.filter(user=user).exists():
@@ -73,3 +73,15 @@ def claim_post(request):
         'post': post.text
     }
     return JsonResponse(data)
+
+
+def get_notifications():
+    claims = user.claim_set.all()
+    posts = Post.objects.order_by('-id')
+
+    for post in posts:
+        if post.isToxic():
+            print("Type: Detected", post)
+
+    for claim in claims:
+        print("Type: Claim", claim.post)

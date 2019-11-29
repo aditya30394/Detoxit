@@ -30,6 +30,16 @@
     display: flex;
 }
 
-.column {
+.column.posts {
     flex: 50%;
+}
+
+.column.notifications {
+    flex: 25%;
+}
+
+.wrapper {
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
 }

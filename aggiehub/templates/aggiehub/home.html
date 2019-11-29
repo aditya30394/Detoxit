@@ -4,8 +4,15 @@ Home
 {% endblock %}
 {% block content %}
 Hello {{user.name}}
+<br>
+<br>
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="save btn btn-default">Post</button>
+</form>
 <div class="row">
-    <div class="column">
+    <div class="column posts">
         <ul id="posts">
             {% for post in posts %}
                 <li>
@@ -20,7 +27,7 @@ Hello {{user.name}}
             {% endfor %}
         </ul>
     </div>
-    <div class="column">
+    <div class="column notifications">
         <h> Claims </h>
         <ul id="claims">
             {% for claim in claims %}
@@ -28,10 +35,13 @@ Hello {{user.name}}
             {% endfor %}
         </ul>
     </div>
+    <div class="column notifications">
+        <h> Survey </h>
+        <ul id="claims">
+            {% for survey in surveys %}
+                <li>Survey for "{{ survey.post }}"</li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
-<form method="POST" class="login-form">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="save btn btn-default">Post</button>
-</form>
 {% endblock %}
