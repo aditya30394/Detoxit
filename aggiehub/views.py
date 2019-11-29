@@ -4,6 +4,8 @@ from django.shortcuts import redirect, render
 from aggiehub.forms import LoginForm, PostForm
 from aggiehub.models import User, Post
 
+from toxicdetector import predict as predict
+
 user = None
 
 def home(request):
@@ -16,6 +18,8 @@ def home(request):
             post = form.save(commit=False)
             post.user = user
             post.save()
+            score = predict.getPredictions(post.text)
+            predict.save_to_db(score)
             return redirect("home")
     else:
         posts = Post.objects.order_by('-id')
