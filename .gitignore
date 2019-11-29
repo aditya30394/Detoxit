@@ -1,4 +1,4 @@
 db.sqlite3
-~/aggiehub/__pycache__/*
+~/__pycache__/*
 ~/.vscode/*
 ~/env/*
