@@ -64,5 +64,5 @@ class Survey(models.Model):
     SCORE_CHOICES = zip(range(1, 6), range(1, 6))
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    score = models.IntegerField(choices=SCORE_CHOICES, blank=True)
+    score = models.IntegerField(choices=SCORE_CHOICES, blank=True, null=True)
     is_completed = models.BooleanField(default=False)

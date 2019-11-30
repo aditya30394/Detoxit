@@ -26,9 +26,15 @@ def home(request):
     else:
         posts = Post.objects.filter(score__lte = 0.5).order_by('-id')
         claims = user.claim_set.all()
+        
+        already_claimed_posts = []
+        for claim in claims:
+            if claim.post in posts:
+                already_claimed_posts.append(claim.post)
+
         notifications = user.notification_set.all().order_by("-updated")
-        surveys = user.survey_set.all()
-        context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "claims": claims, "surveys":surveys}
+        surveys = user.survey_set.filter(is_completed__exact = False)
+        context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "claims": claims, "surveys":surveys, "already_claimed_posts":already_claimed_posts}
         return render(request, "aggiehub/home.html", context)
 
 
