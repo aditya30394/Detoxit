@@ -1,5 +1,5 @@
 db.sqlite3
-*/__pycache__/*
+**/__pycache__/*
 ~/.vscode/*
 ~/env/*
 toxicdetector/detoxit_model_sigmoid.h5
