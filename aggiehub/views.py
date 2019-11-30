@@ -26,7 +26,7 @@ def home(request):
     else:
         posts = Post.objects.filter(score__lte = 0.5).order_by('-id')
         notifications = user.notification_set.all().order_by("-updated")
-        surveys = user.survey_set.filter(is_completed = True)
+        surveys = user.survey_set.filter(is_completed__exact = False)
         context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "surveys":surveys}
         return render(request, "aggiehub/home.html", context)
 

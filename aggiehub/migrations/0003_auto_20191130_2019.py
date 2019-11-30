@@ -3,8 +3,7 @@
 from django.db import migrations
 
 def create_users(apps, schema_editor):
-    # We can't import the Person model directly as it may be a newer
-    # version than this migration expects. We use the historical version.
+    
     User = apps.get_model("aggiehub", "User")
     db_alias = schema_editor.connection.alias
     
@@ -21,6 +20,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-    	migrations.RunPython(create_users),
+        migrations.RunPython(create_users),
     ]
 
