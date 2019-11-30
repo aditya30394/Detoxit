@@ -13,34 +13,47 @@ Hello {{user.name}}
 </form>
 <div class="row">
     <div class="column posts">
-        <ul id="posts">
-            {% for post in posts %}
-                <li>
-                    {{ post.text }} 
-                    <br> 
-                    <b>-{{post.user}}</b>
-                    {% if user == post.user %}
-                        <a id="{{ post.id}}" class="removeOrClaim" href="http://www.google.com">remove</a> </li>
-                    {% else %}
-                        <a id="{{ post.id}}" class="removeOrClaim" href="http://www.google.com">claim</a> </li>
-                    {% endif %}
-            {% endfor %}
-        </ul>
+        {% for post in posts %}
+            <div class="card content">
+                <div class="row">
+                    <div class="col s12 m12">
+                        <div class="card blue lighten-5">
+                            <div class="card-content black-text">
+                                <span class="card-title blue-text text-darken-4">{{post.user}}</span>
+                                <p>{{ post.text }} </p>
+                            </div>
+                            <div class="card-action">
+                                {% if user == post.user %}
+                                    <a id="{{ post.id}}" class="removeOrClaim blue-text text-darken-2" href="http://www.google.com">remove</a> </li>
+                                {% else %}
+                                    <a id="{{ post.id}}" class="removeOrClaim blue-text text-darken-2" href="http://www.google.com">report</a> </li>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
+
     <div class="column notifications">
-        <h> Notifications </h>
-        <ul id="notifications">
-            {% for notification in notifications %}
-                {% if notification.type == "CLAIM_TOXIC" or notification.type == "CLAIM_NONTOXIC" %}
-                    <li>You have claimed the post "{{ notification.text }}" as {% if notification.type == "CLAIM_TOXIC" %} toxic {% else %} non-toxic {%endif%} and it is under review.</li>
-                {% else %}
-                    <li>
-                        Your post "{{ notification.text }}" has been flagged as toxic.
-                        Press this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
-                    </li> 
-                {% endif %}
-            {% endfor %}
-        </ul>
+        <h4 id="notifications" class="card-title"> Notifications </h4>
+        {% for notification in notifications %}
+        <div class="row">
+            <div class="col s12 m12 card card-content black-text"> 
+            {% if notification.type == "CLAIM_TOXIC" or notification.type == "CLAIM_NONTOXIC" %}
+                <p>
+                    You have claimed the post "{{ notification.text }}" as {% if notification.type == "CLAIM_TOXIC" %} toxic {% else %} non-toxic {%endif%} and it is under review.
+                </p>
+            {% else %}
+                <p>
+                    Your post "{{ notification.text }}" has been flagged as toxic.
+                    Click this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
+                </p> 
+            {% endif %}
+            </div>
+        </div>
+        {% endfor %}
     </div>
     <div class="column notifications">
         <h> Survey </h>

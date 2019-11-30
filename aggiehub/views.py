@@ -25,9 +25,10 @@ def home(request):
             return redirect("home")
     else:
         posts = Post.objects.filter(score__lte = 0.5).order_by('-id')
+        claims = user.claim_set.all()
         notifications = user.notification_set.all().order_by("-updated")
-        surveys = user.survey_set.filter(is_completed = True)
-        context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "surveys":surveys}
+        surveys = user.survey_set.all()
+        context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "claims": claims, "surveys":surveys}
         return render(request, "aggiehub/home.html", context)
 
 
@@ -68,7 +69,6 @@ def claim_post(request):
     post = Post.objects.get(pk=post_id)
     exists = True
     claim_type = Notification.CLAIM_TOXIC
-
 
     if not post.claim_set.filter(user=user).exists():
         exists = False
