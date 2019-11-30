@@ -41,7 +41,7 @@
             debugger;
             id = this.id;
             action = this.text
-            if(action == "report") {
+            if(action == "report" || action == "claim") {
                 ajax_url = "/ajax/claim/"
             } else {
                 ajax_url = "/ajax/delete/"
@@ -56,7 +56,7 @@
                 success: function (data) {
                     debugger;
                     if (data.success) {
-                        if(action == "report"){
+                        if(action == "report" || action == "claim"){
                             if(data.exists) {
                                 alert("Already Claimed!!!");
                             } else {

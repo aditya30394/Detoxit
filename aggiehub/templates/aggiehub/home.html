@@ -58,12 +58,17 @@ Home
         {% endfor %}
     </div>
     <div class="column notifications">
-        <h> Survey </h>
-        <ul id="surveys">
-            {% for survey in surveys %}
-                <li>Survey for "{{ survey.post }}"</li>
-            {% endfor %}
-        </ul>
+        <h4 id="Surveys" class="card-title"> Surveys </h4>
+        {% for survey in surveys %}
+            <div class="row">
+                <div class="col s12 m12 card card-content black-text"> 
+                    <p>
+                        Your post "{{ notification.text }}" has been flagged as toxic.
+                        Click this to <a id="{{ survey.id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
+                    </p> 
+                </div>
+            </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
