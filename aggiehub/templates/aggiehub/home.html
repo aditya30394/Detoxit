@@ -3,21 +3,21 @@
 Home
 {% endblock %}
 {% block content %}
-Hello {{user.name}}
-<br>
-<br>
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="save btn btn-default">Post</button>
-</form>
+<h4> Hello {{user.name}} </h4>
 <div class="row">
     <div class="column posts">
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit" class="post-button save btn btn-default">Post</button>
+        </form>
+        <br>
         {% for post in posts %}
             <div class="card content">
                 <div class="row">
-                    <div class="col s12 m12">
-                        <div class="card blue lighten-5">
+                    <div class="col s12 m12 post-background">
+                        <div class="card">
                             <div class="card-content black-text">
                                 <span class="card-title blue-text text-darken-4">{{post.user}}</span>
                                 <p>{{ post.text }} </p>
@@ -47,7 +47,7 @@ Hello {{user.name}}
                 </p>
             {% else %}
                 <p>
-                    Your post "{{ notification.text }}" has been flagged as toxic.
+                    Your post "{{ notification.text }}" has been flagged as toxic.<br>
                     Click this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
                 </p> 
             {% endif %}

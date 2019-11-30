@@ -61,3 +61,27 @@
 .display-flex {
     display: flex
 }  
+
+.width-auto {
+    width: auto !important;
+}
+
+.post-button {
+    position: absolute;
+    margin: 6px;
+}
+
+#id_text {
+    width: 80%;
+    box-sizing: border-box;
+    border: 1px solid;
+    margin: 3px;
+}
+
+.post-background {
+    background-color: #f6f8fa !important;
+}
+
+.column.posts .card {
+    margin: 0.5rem 0 0.5rem 0 !important;
+}
