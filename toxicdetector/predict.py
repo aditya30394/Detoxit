@@ -1,9 +1,13 @@
+import tensorflow as tf
 import keras
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model
-import tensorflow as tf
+
 import pickle
+
+import os
+cwd = os.path.dirname(os.path.realpath(__file__))
 
 global graph
 graph = tf.get_default_graph()
@@ -13,12 +17,12 @@ weights = [0.5, 0.1, 0.1, 0.1, 0.1, 0.1]
 
 
 with graph.as_default():
-	model = load_model("/home/phoenix1712/detoxit/toxicdetector/detoxit_model_sigmoid.h5")
+	model = load_model(cwd + "/detoxit_model_sigmoid.h5")
 
-with open('/home/phoenix1712/detoxit/toxicdetector/tokenizer.pickle', 'rb') as handle:
+with open(cwd + '/tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
 
-
+print(model)
 def predict(str_comment):
 	result = dict()
 	new_sent = [str_comment]
