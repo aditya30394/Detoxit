@@ -28,16 +28,23 @@ Hello {{user.name}}
         </ul>
     </div>
     <div class="column notifications">
-        <h> Claims </h>
-        <ul id="claims">
-            {% for claim in claims %}
-                <li>Claim for "{{ claim.post }}"</li>
+        <h> Notifications </h>
+        <ul id="notifications">
+            {% for notification in notifications %}
+                {% if notification.type == "CLAIM_TOXIC" or notification.type == "CLAIM_NONTOXIC" %}
+                    <li>You have claimed the post "{{ notification.text }}" as {% if notification.type == "CLAIM_TOXIC" %} toxic {% else %} non-toxic {%endif%} and it is under review.</li>
+                {% else %}
+                    <li>
+                        Your post "{{ notification.text }}" has been flagged as toxic.
+                        Press this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
+                    </li> 
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
     <div class="column notifications">
         <h> Survey </h>
-        <ul id="claims">
+        <ul id="surveys">
             {% for survey in surveys %}
                 <li>Survey for "{{ survey.post }}"</li>
             {% endfor %}

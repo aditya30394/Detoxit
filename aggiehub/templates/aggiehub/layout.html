@@ -46,12 +46,15 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.success) {
-                        debugger;
                         if(action == "claim"){
                             if(data.exists) {
                                 alert("Already Claimed!!!");
                             } else {
-                                $("#claims").append('<li> Claim for "' + data.post + '"</li>');
+                                claimType = "toxic"
+                                if(data.claimType == "CLAIM_NONTOXIC") {
+                                    claimType = "non-toxic"
+                                }
+                                $("#notifications").prepend('<li> You have claimed the post "' + data.post + '" as ' + claimType + ' and it is under review.</li>');
                             }
                         } else {
                             $("#"+id).parent().remove()

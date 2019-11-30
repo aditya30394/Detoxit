@@ -1,31 +1,40 @@
-from aggiehub.models import Toxic
 import keras
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model
+import tensorflow as tf
+import pickle
 
-processing_len = 140
-model = load_model("E:\FALL2019\IUI634\Project\detoxit\detoxit_model.h5")
+global graph
+graph = tf.get_default_graph()
+processing_len = 160
 category = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
-weights = [0.05, 0.25, 0.2, 0.2, 0.15,0.15]
-tknzr = Tokenizer(char_level=False, oov_token=None, num_words=None, split=' ', lower=True, filters='!"#$%&()*+,\t-./:;\n<=>?@[\]^_`{|}~ ', document_count=0)
+weights = [0.5, 0.1, 0.1, 0.1, 0.1, 0.1]
+
+
+with graph.as_default():
+	model = load_model("/home/phoenix1712/detoxit/toxicdetector/detoxit_model_sigmoid.h5")
+
+with open('/home/phoenix1712/detoxit/toxicdetector/tokenizer.pickle', 'rb') as handle:
+    tokenizer = pickle.load(handle)
 
 
 def predict(str_comment):
 	result = dict()
 	new_sent = [str_comment]
-	new_sent = tknzr.texts_to_sequences(new_sent, maxlen=processing_len, padding='post', truncating='post')
-	prediction = model.predict(new_sent)
-	for i in range(0,6):
-		result.add(i, ('{:.0}'.format(prediction[0][i])))
+	new_sent_tokens = tokenizer.texts_to_sequences(new_sent)
+	new_sent = pad_sequences(new_sent_tokens, maxlen=processing_len, padding="post", truncating="post")
+	with graph.as_default():
+		prediction = model.predict(new_sent)
+		for i in range(0,6):
+			result[i] = '{:.0}'.format(prediction[0][i])
 	return result
+
 
 def getPredictions(str_comment):
 	res = predict(str_comment)
 	score = 0.0
 	for i in range(0,6):
-		score += (res[0][i]) * weights[i]
+		# score += float(res[i]) * weights[i]
+		score = max(score, float(res[i]))
 	return score
-
-def save_to_db(score):
-	Toxic.objects.create(id=_id, score=score)
