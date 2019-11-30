@@ -3,7 +3,7 @@
     font-size: 1em;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: white;
-    padding: 8px 5px 8px 5px;
+    padding: 8px 24px 8px 24px;
 }
 
 .navbar a {
@@ -31,11 +31,21 @@
 }
 
 .column.posts {
+    padding: 24px;
     flex: 50%;
 }
 
 .column.notifications {
+    padding: 24px;
     flex: 25%;
+}
+
+.column.notifications .row {
+    margin-bottom: 0px !important;
+}
+
+.column.notifications .card {
+    margin-bottom: 0.5rem !important;
 }
 
 .wrapper {
@@ -43,3 +53,11 @@
     display: grid;
     grid-template-rows: auto 1fr auto;
 }
+
+.display-inline {
+    display: inline
+}
+
+.display-flex {
+    display: flex
+}  

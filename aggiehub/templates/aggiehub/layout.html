@@ -5,14 +5,21 @@
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'aggiehub/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'aggiehub/materialize.css' %}"/>
 </head>
 
 <body>
-<div class="navbar">
-    <a href="{% url 'home' %}" class="navbar-brand">Home</a>
-    {% if user != None %}
-        <a href="{% url 'logout' %}" class="navbar-brand">Logout</a>
-    {% endif %}
+<div class="navbar ">
+    <ul class="display-flex">
+        <li class="display-inline">
+            <a href="{% url 'home' %}" class="navbar-brand"> Home </a>
+        <li>
+        {% if user != None %}
+            <li class="display-inline right-align left-margin-auto">
+                <a href="{% url 'logout' %}" class="navbar-brand"> Logout </a>
+            </li>
+        {% endif %}
+    <ul>
 </div>
 
 <div class="body-content">
@@ -33,11 +40,12 @@
             debugger;
             id = this.id;
             action = this.text
-            if(action == "claim") {
+            if(action == "report") {
                 ajax_url = "/ajax/claim/"
             } else {
                 ajax_url = "/ajax/delete/"
             }
+            debugger;
             $.ajax({
                 url: ajax_url,
                 data: {
@@ -45,8 +53,9 @@
                 },
                 dataType: 'json',
                 success: function (data) {
+                    debugger;
                     if (data.success) {
-                        if(action == "claim"){
+                        if(action == "report"){
                             if(data.exists) {
                                 alert("Already Claimed!!!");
                             } else {
@@ -54,10 +63,15 @@
                                 if(data.claimType == "CLAIM_NONTOXIC") {
                                     claimType = "non-toxic"
                                 }
-                                $("#notifications").prepend('<li> You have claimed the post "' + data.post + '" as ' + claimType + ' and it is under review.</li>');
+                                $("#notifications").after('' +
+                                    '<div class="row">' +
+                                    '   <div class="col s12 m12 card card-content black-text">' +
+                                    '       <p> You have claimed the post "' + data.post + '" as ' + claimType + ' and it is under review.</p>' +
+                                    '   </div>' +
+                                    '</div>');
                             }
                         } else {
-                            $("#"+id).parent().remove()
+                            $("#"+id).parent().parent().parent().parent().remove()
                         }
                     }
                 }
