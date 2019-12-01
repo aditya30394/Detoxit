@@ -16,7 +16,7 @@ def create_notifications_survey(apps, schema_editor):
 
         for post in posts:
             if post.score > 0.5:
-                notification = Notification(user = user, notif_id = post.id, type = 'Toxic', text = post.text)
+                notification = Notification(user = user, notif_id = post.id, type = 'Toxic', text = post.text, toxic_words = "shit, die")
                 notifications.append(notification)
             
             for other_user in all_other_users:
