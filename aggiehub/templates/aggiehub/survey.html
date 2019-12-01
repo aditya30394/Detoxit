@@ -1,0 +1,27 @@
+{% extends "aggiehub/layout.html" %}
+{% block title %}
+    Survey
+{% endblock %}
+{% block content %}
+    <form method="POST" class="survey-form" action="/survey/{{ id }}/">
+        {% csrf_token %}
+        <div class="fieldWrapper">
+    		{{ form.post_text.errors }}
+    		{{ form.post_text.label_tag }}
+    		{{ form.post_text }}
+		</div>
+        <p>Likes:
+		    {% for value, text in form.score.field.choices %}
+		    	<p>
+			      <label>
+			        <input name="like" value="{{ value }}" type="radio" required/>
+			        <span>{{ text }}</span>
+			      </label>
+			    </p>
+			{% endfor %}
+		</p>
+  
+        <button type="submit" class="save btn btn-default">Submit Score</button>
+    </form>
+
+{% endblock %}
