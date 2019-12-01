@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 
 from aggiehub.forms import LoginForm, PostForm
 from aggiehub.models import User, Post, Notification, Claim
-
+from toxicdetector import naive_predict as naive_predict
 from toxicdetector import predict as predict
 
 user = None
@@ -20,7 +20,9 @@ def home(request):
             post.score = predict.getPredictions(post.text)
             post.save()
             if post.score > 0.5:
-                notification = Notification(user = user, notif_id = post.id, type = Notification.TOXIC, text = post.text)
+                toxic_words = naive_predict.predict_each_word(post.text)
+                toxic_words = ' ,'.join(toxic_words)
+                notification = Notification(user = user, notif_id = post.id, type = Notification.TOXIC, text = post.text, toxic_words = toxic_words)
                 notification.save()
             return redirect("home")
     else:
@@ -75,7 +77,6 @@ def claim_post(request):
     post = Post.objects.get(pk=post_id)
     exists = True
     claim_type = Notification.CLAIM_TOXIC
-
     if not post.claim_set.filter(user=user).exists():
         exists = False
         claim = Claim(post=post, user=user, resolved=False)
