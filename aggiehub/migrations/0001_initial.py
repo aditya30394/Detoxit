@@ -48,6 +48,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('text', models.CharField(max_length=50)),
+                ('toxic_words', models.CharField(max_length=50)),
                 ('type', models.CharField(choices=[('CLAIM_TOXIC', 'Claim Toxic'), ('CLAIM_NONTOXIC', 'Claim Non-Toxic'), ('TOXIC', 'Toxic')], default='TOXIC', max_length=20)),
                 ('notif_id', models.IntegerField()),
                 ('created', models.DateTimeField(auto_now_add=True)),
