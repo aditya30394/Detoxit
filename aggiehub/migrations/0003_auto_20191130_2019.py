@@ -11,6 +11,9 @@ def create_users(apps, schema_editor):
         User(name="Aditya", email="aditya@tamu.edu"),
         User(name="Vihang", email="vihang@tamu.edu"),
         User(name="Varsha", email="varsha@tamu.edu"),
+        User(name="Yashwant", email="yashwant@tamu.edu"),
+        User(name="Akhila", email="akhila@tamu.edu"),
+        User(name="Aswin", email="aswin@tamu.edu"),
     ])
 
 class Migration(migrations.Migration):

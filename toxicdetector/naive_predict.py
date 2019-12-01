@@ -14,17 +14,17 @@ vectorizer = pickle.load( open( cwd + "/vectorizer.pickle", "rb" ) )
 classifer = pickle.load( open( cwd + "/naive_bayes.pickle", "rb" ) )
 
 def preprocess_input(comment):
-# remove the extra spaces at the end.
+    # remove the extra spaces at the end.
     comment = comment.strip()
-# lowercase to avoid difference between 'hate', 'HaTe'
+    # lowercase to avoid difference between 'hate', 'HaTe'
     comment = comment.lower()
-# remove the escape sequences. 
+    # remove the escape sequences. 
     comment = re.sub('[\s0-9]',' ', comment)
-    #comment = stemmer.stem(comment)
-# Use nltk's word tokenizer to split the sentence into words. It is better than the 'split' method.
+    # comment = stemmer.stem(comment)
+    # Use nltk's word tokenizer to split the sentence into words. It is better than the 'split' method.
     words = nltk.word_tokenize(comment)
-# removing the commonly used words.
-    #words = [word for word in words if not word in stop_words and len(word) > 2]
+    # removing the commonly used words.
+    # words = [word for word in words if not word in stop_words and len(word) > 2]
     words = [word for word in words if len(word) > 2]
     return words
 

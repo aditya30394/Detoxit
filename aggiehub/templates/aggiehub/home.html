@@ -24,11 +24,11 @@ Home
                             </div>
                             <div class="card-action">
                                 {% if user == post.user %}
-                                    <a id="{{ post.id}}" class="removeOrClaim blue-text text-darken-2" href="http://www.google.com">remove</a> </li>
+                                    <a id="{{ post.id}}" class="removeOrClaim blue-text text-darken-2" href="http://www.google.com">remove</a> 
                                 {% elif post in already_claimed_posts %}
-                                    Already Reported </li>
+                                    Already Reported 
                                 {% else %}
-                                    <a id="{{ post.id}}" class="removeOrClaim blue-text text-darken-2" href="http://www.google.com">report</a> </li>
+                                    <a id="{{ post.id}}" class="removeOrClaim blue-text text-darken-2" href="http://www.google.com">report</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -50,6 +50,7 @@ Home
             {% else %}
                 <p>
                     Your post "{{ notification.text }}" has been flagged as toxic.
+                    <br>
                     Following are the toxic words "{{ notification.toxic_words }}"
                     <br>
                     Click this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.

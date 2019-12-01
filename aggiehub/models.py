@@ -21,18 +21,6 @@ class Post(models.Model):
         return True if self.score > 0.5 else False
 
 
-# class Toxic(models.Model):
-#     post = models.OneToOneField(
-#         Post,
-#         on_delete=models.CASCADE,
-#         primary_key=True,
-#     )
-#     score = models.FloatField(default=None)
-
-#     def __str__(self):
-#         return "'{}' has a toxicity score of '{}'".format(self.post, self.score)
-
-
 class Claim(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

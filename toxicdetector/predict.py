@@ -31,6 +31,8 @@ def predict(str_comment):
 			result[i] = '{:.0}'.format(prediction[0][i])
 	return result
 
+def update_model():
+	pass
 
 def getPredictions(str_comment):
 	res = predict(str_comment)

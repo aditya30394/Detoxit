@@ -1,20 +1,20 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 
-from aggiehub.forms import LoginForm, PostForm
-from aggiehub.models import User, Post, Notification, Claim
-
-from toxicdetector import naive_predict as naive_predict
-
 from aggiehub.forms import LoginForm, PostForm, SurveyForm
 from aggiehub.models import User, Post, Notification, Claim, Survey
-from toxicdetector import naive_predict as naive_predict
 
+from toxicdetector import naive_predict as naive_predict
 from toxicdetector import predict as predict
+
 import logging
+import random
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+num_of_surveys_to_publish = 2
+min_required_claims = 2        
 
 user = None
 
@@ -45,7 +45,7 @@ def home(request):
                 already_claimed_posts.append(claim.post)
 
         notifications = user.notification_set.all().order_by("-updated")
-        surveys = user.survey_set.filter(is_completed__exact = False)
+        surveys = user.survey_set.filter(is_completed__exact = False).order_by('-id')
         context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "claims": claims, "surveys":surveys, "already_claimed_posts":already_claimed_posts}
         return render(request, "aggiehub/home.html", context)
 
@@ -87,14 +87,21 @@ def claim_post(request):
     post = Post.objects.get(pk=post_id)
     exists = True
     claim_type = Notification.CLAIM_TOXIC
+    
     if not post.claim_set.filter(user=user).exists():
         exists = False
+        
         claim = Claim(post=post, user=user, resolved=False)
         claim.save()
+        
         if post.user == user:
             claim_type = Notification.CLAIM_NONTOXIC
         notification = Notification(user = user, notif_id = claim.id, type = claim_type, text = post.text)
         notification.save()
+        
+        user_claims = Claim.objects.values('user').filter(post__exact = post)
+        if user_claims.count() >= min_required_claims:
+            publish_survey(post, user_claims)
     
     data = {
         'success': True,
@@ -104,11 +111,9 @@ def claim_post(request):
     }
     return JsonResponse(data)
 
+
 def survey(request, sid):
     if request.method == "POST":
-        #form = SurveyForm(request.POST)
-        #logger.error(form)
-        #logger.error(request.POST)
         survey = Survey.objects.get(id=sid)
         survey.score = request.POST['score']
         survey.is_completed = True
@@ -119,3 +124,16 @@ def survey(request, sid):
         form = SurveyForm(auto_id=False, initial={'post_text': survey.post.text})
         context = {"form": form, "id": sid, "survey":survey }
         return render(request, "aggiehub/survey.html", context)
+
+
+def publish_survey(post, user_claims):
+    users = get_random_users(num_of_surveys_to_publish, user_claims)
+    for user in users:
+        survey = Survey(post = post, user = user)
+        survey.save()
+
+
+def get_random_users(n, user_claims):
+    userset = User.objects.exclude(email__exact = user.email).exclude(email__exact = user.email)
+    users = random.sample(list(userset), n)
+    return users

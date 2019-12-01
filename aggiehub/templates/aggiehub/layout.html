@@ -70,6 +70,7 @@
                                     '       <p> You have claimed the post "' + data.post + '" as ' + claimType + ' and it is under review.</p>' +
                                     '   </div>' +
                                     '</div>');
+                                $('#'+id).replaceWith("Already Reported");
                             }
                         } else {
                             $("#"+id).parent().parent().parent().parent().remove()
