@@ -49,7 +49,9 @@ Home
                 </p>
             {% else %}
                 <p>
-                    Your post "{{ notification.text }}" has been flagged as toxic.<br>
+                    Your post "{{ notification.text }}" has been flagged as toxic.
+                    Following are the toxic words "{{ notification.toxic_words }}"
+                    <br>
                     Click this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
                 </p> 
             {% endif %}
