@@ -99,8 +99,9 @@ def claim_post(request):
         notification = Notification(user = user, notif_id = claim.id, type = claim_type, text = post.text)
         notification.save()
         
-        user_claims = Claim.objects.values('user').filter(post__exact = post)
-        if user_claims.count() >= min_required_claims:
+        user_claims = Claim.objects.filter(post__exact = post)
+        if claim_type == Notification.CLAIM_NONTOXIC or \
+                (claim_type == Notification.CLAIM_TOXIC and user_claims.count() >= min_required_claims):
             publish_survey(post, user_claims)
     
     data = {
@@ -127,13 +128,13 @@ def survey(request, sid):
 
 
 def publish_survey(post, user_claims):
-    users = get_random_users(num_of_surveys_to_publish, user_claims)
+    users = get_random_users(num_of_surveys_to_publish, user_claims, post)
     for user in users:
         survey = Survey(post = post, user = user)
         survey.save()
 
 
-def get_random_users(n, user_claims):
-    userset = User.objects.exclude(email__exact = user.email).exclude(email__exact = user.email)
+def get_random_users(n, user_claims, post):
+    userset = User.objects.exclude(email__in = [claim.user.email for claim in user_claims]).exclude(email__exact = post.user.email)
     users = random.sample(list(userset), n)
     return users
