@@ -1,8 +1,14 @@
+from aggiehub.models import Survey
+
 import keras
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model
+from keras import optimizers
+
+from decimal import *
 import tensorflow as tf
+import numpy as np
 import pickle
 import os
 
@@ -31,8 +37,15 @@ def predict(str_comment):
 			result[i] = '{:.0}'.format(prediction[0][i])
 	return result
 
-def update_model():
-	pass
+
+def update_model(survey_posts):
+	train, test = format_survey_results(survey_posts)
+	if len(train) > 0 :
+		train_seq = tokenizer.texts_to_sequences(train)
+		padded_X_train = pad_sequences(train_seq, maxlen=processing_len, padding='post', value=0.0, truncating='post')
+		model.fit(padded_X_train, test, batch_size=64, epochs=6, verbose=1, shuffle=False)
+		model.save(cwd + "/detoxit_model_sigmoid_updated.h5")
+
 
 def getPredictions(str_comment):
 	res = predict(str_comment)
@@ -41,3 +54,49 @@ def getPredictions(str_comment):
 		# score += float(res[i]) * weights[i]
 		score = max(score, float(res[i]))
 	return score
+
+
+def format_survey_results(survey_posts):
+	train = []
+	test = []
+	for post in survey_posts:
+		surveys = Survey.objects.filter(post__exact = post, is_completed__exact = True)
+		median = median_value(surveys, "score")
+		
+		for survey in surveys:
+			survey.is_completed = True
+			survey.save()
+
+		if (post.isToxic() and median > 3) or (not post.isToxic() and median < 3) or median == 3:
+			claims = post.claim_set.all()
+			for claim in claims:
+				claim.resolved = True
+				claim.save()
+		else:
+			if median < 3:
+				post.score = 0.0
+			else:
+				post.score = 1.0
+			post.save()
+			train.append(post.text)
+			res = predict(post.text)
+			score = 0.0
+			for i in range(0,6):
+				score = max(score, float(res[i]))
+			one_hot_encoding = []
+			for i in range(0,6):
+				if float(res[i]) == score:
+					one_hot_encoding.append(1)
+				else:
+					one_hot_encoding.append(0)
+			test.append(np.asarray(one_hot_encoding))
+	return train, np.asarray(test)
+
+
+def median_value(queryset, term):
+    count = queryset.count()
+    values = queryset.values_list(term, flat=True).order_by(term)
+    if count % 2 == 1:
+        return values[int(round(count/2))]
+    else:
+        return sum(values[count/2-1:count/2+1])/Decimal(2.0)

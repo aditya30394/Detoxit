@@ -14,7 +14,10 @@ import random
 logger = logging.getLogger(__name__)
 
 num_of_surveys_to_publish = 2
+min_survey_required = 2
+min_posts_to_retrain = 2
 min_required_claims = 2        
+survey_posts = set()
 
 user = None
 
@@ -114,11 +117,22 @@ def claim_post(request):
 
 
 def survey(request, sid):
+    if user is None:
+        return redirect("login")
+
     if request.method == "POST":
         survey = Survey.objects.get(id=sid)
         survey.score = request.POST['score']
         survey.is_completed = True
         survey.save()
+
+        survey_results = Survey.objects.filter(post__exact = survey.post, is_completed__exact = True)
+        if survey_results.count() >= min_survey_required:
+            survey_posts.add(survey.post)
+        if len(survey_posts) >= min_posts_to_retrain:
+            predict.update_model(survey_posts)
+            survey_posts.clear()
+
         return redirect("home")
     else:
         survey = Survey.objects.get(id=sid)
