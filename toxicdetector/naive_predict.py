@@ -4,11 +4,14 @@ import pickle
 from sklearn.linear_model import LogisticRegression
 from nltk.stem import PorterStemmer
 
+import os
+cwd = os.path.dirname(os.path.realpath(__file__))
+
 nltk.download('stopwords')
 stemmer= PorterStemmer()
 stop_words = set(nltk.corpus.stopwords.words('english'))
-vectorizer = pickle.load( open( r"E:\FALL2019\IUI634\Project\detoxit\toxicdetector\vectorizer.pickle", "rb" ) )
-classifer = pickle.load( open( r"E:\FALL2019\IUI634\Project\detoxit\toxicdetector\naive_bayes.pickle", "rb" ) )
+vectorizer = pickle.load( open( cwd + "/vectorizer.pickle", "rb" ) )
+classifer = pickle.load( open( cwd + "/naive_bayes.pickle", "rb" ) )
 
 def preprocess_input(comment):
 # remove the extra spaces at the end.

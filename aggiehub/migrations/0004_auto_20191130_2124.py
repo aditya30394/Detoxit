@@ -12,12 +12,12 @@ def create_posts(apps, schema_editor):
     for user in User.objects.all():
         name = user.name
         Post.objects.using(db_alias).bulk_create([
-            Post(user=user, text=name + "some random comment has been added 1", score=random.uniform(0.0, 0.5)),
-            Post(user=user, text=name + "some random comment has been added 2", score=random.uniform(0.0, 0.5)),
-            Post(user=user, text=name + "some random comment has been added 3", score=random.uniform(0.0, 0.5)),
-            Post(user=user, text=name + "some random comment has been added 4", score=random.uniform(0.5, 1.0)),
-            Post(user=user, text=name + "some random comment has been added 5", score=random.uniform(0.5, 1.0)),
-            Post(user=user, text=name + "some random comment has been added 6", score=random.uniform(0.5, 1.0)),
+            Post(user=user, text=name + " some random comment has been added 1", score=random.uniform(0.0, 0.49)),
+            Post(user=user, text=name + " some random comment has been added 2", score=random.uniform(0.0, 0.49)),
+            Post(user=user, text=name + " some random comment has been added 3", score=random.uniform(0.0, 0.49)),
+            Post(user=user, text=name + " some random comment has been added 4", score=random.uniform(0.5, 1.0)),
+            Post(user=user, text=name + " some random comment has been added 5", score=random.uniform(0.5, 1.0)),
+            Post(user=user, text=name + " some random comment has been added 6", score=random.uniform(0.5, 1.0)),
         ])
 
 class Migration(migrations.Migration):

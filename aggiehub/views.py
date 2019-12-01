@@ -3,8 +3,18 @@ from django.shortcuts import redirect, render
 
 from aggiehub.forms import LoginForm, PostForm
 from aggiehub.models import User, Post, Notification, Claim
+
 from toxicdetector import naive_predict as naive_predict
+
+from aggiehub.forms import LoginForm, PostForm, SurveyForm
+from aggiehub.models import User, Post, Notification, Claim, Survey
+from toxicdetector import naive_predict as naive_predict
+
 from toxicdetector import predict as predict
+import logging
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 user = None
 
@@ -93,3 +103,17 @@ def claim_post(request):
         'claimType': claim_type
     }
     return JsonResponse(data)
+
+def survey(request, sid):
+    logger.error(request)
+    
+    form = SurveyForm(request.POST or None)
+    
+    if request.method == "POST":
+        
+        return redirect("home")
+    else:
+        survey = Survey.objects.get(id=sid)
+        form = SurveyForm(auto_id=False, initial={'post_text': survey.post.text})
+        context = {"form": form, "id": sid, "survey":survey }
+        return render(request, "aggiehub/survey.html", context)
