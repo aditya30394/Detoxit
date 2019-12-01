@@ -10,11 +10,11 @@
     		{{ form.post_text.label_tag }}
     		{{ form.post_text }}
 		</div>
-        <p>Likes:
+        <p>Score:
 		    {% for value, text in form.score.field.choices %}
 		    	<p>
 			      <label>
-			        <input name="like" value="{{ value }}" type="radio" required/>
+			        <input name="score" value="{{ value }}" type="radio" required/>
 			        <span>{{ text }}</span>
 			      </label>
 			    </p>

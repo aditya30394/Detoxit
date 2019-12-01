@@ -105,12 +105,14 @@ def claim_post(request):
     return JsonResponse(data)
 
 def survey(request, sid):
-    logger.error(request)
-    
-    form = SurveyForm(request.POST or None)
-    
     if request.method == "POST":
-        
+        #form = SurveyForm(request.POST)
+        #logger.error(form)
+        #logger.error(request.POST)
+        survey = Survey.objects.get(id=sid)
+        survey.score = request.POST['score']
+        survey.is_completed = True
+        survey.save()
         return redirect("home")
     else:
         survey = Survey.objects.get(id=sid)
