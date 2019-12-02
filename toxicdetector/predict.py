@@ -20,7 +20,7 @@ category = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_ha
 weights = [0.5, 0.1, 0.1, 0.1, 0.1, 0.1]
 
 with graph.as_default():
-	model = load_model(cwd + "/detoxit_model_sigmoid.h5")
+	model = load_model(cwd + "/detoxit_model_sigmoid_updated.h5")
 
 with open(cwd + '/tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
@@ -49,6 +49,7 @@ def update_model(survey_posts):
 
 def getPredictions(str_comment):
 	res = predict(str_comment)
+	print(res)
 	score = 0.0
 	for i in range(0,6):
 		# score += float(res[i]) * weights[i]
@@ -66,11 +67,6 @@ def format_survey_results(survey_posts):
 		if (post.isToxic() and median > 3) or (not post.isToxic() and median < 3) or median == 3:
 			print("Correctly guessed.")
 		else:
-			if median < 3:
-				post.score = 0.0
-			else:
-				post.score = 1.0
-			post.save()
 			train.append(post.text)
 			res = predict(post.text)
 			score = 0.0
@@ -78,11 +74,16 @@ def format_survey_results(survey_posts):
 				score = max(score, float(res[i]))
 			one_hot_encoding = []
 			for i in range(0,6):
-				if float(res[i]) == score:
+				if float(res[i]) == score and post.score < 0.5:
 					one_hot_encoding.append(1)
 				else:
 					one_hot_encoding.append(0)
 			test.append(np.asarray(one_hot_encoding))
+			if median < 3:
+				post.score = 0.0
+			else:
+				post.score = 1.0
+			post.save()
 		
 		all_surveys = Survey.objects.filter(post__exact = post)
 		for survey in all_surveys:
