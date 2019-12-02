@@ -6,10 +6,12 @@ def create_notifications_survey(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     User = apps.get_model('aggiehub', 'User')
     Post = apps.get_model("aggiehub", "Post")
+    Claim = apps.get_model("aggiehub", "Claim")
     Notification = apps.get_model("aggiehub", "Notification")
     Survey = apps.get_model("aggiehub", "Survey")
     notifications = []
     surveys = []
+    claims = []
     for user in User.objects.all():
         posts = user.post_set.all()
         all_other_users = User.objects.all().exclude(email__exact = user.email)
@@ -18,13 +20,26 @@ def create_notifications_survey(apps, schema_editor):
             if post.score > 0.5:
                 notification = Notification(user = user, notif_id = post.id, type = 'Toxic', text = post.text, toxic_words = "shit, die")
                 notifications.append(notification)
-            
-            for other_user in all_other_users:
-                survey = Survey(user=other_user, post=post)
-                surveys.append(survey)
+                claim = Claim(user=user, post=post)
+                claims.append(claim)
+                for other_user in all_other_users:
+                    survey = Survey(user=other_user, post=post)
+                    surveys.append(survey)
 
     Notification.objects.bulk_create(notifications)
-    Survey.objects.bulk_create(surveys)         
+    Claim.objects.bulk_create(claims)
+    Survey.objects.bulk_create(surveys)
+
+    for user in User.objects.all():
+        posts = user.post_set.all()
+        all_other_users = User.objects.all().exclude(email__exact = user.email)
+        
+        claims = user.claim_set.all()
+        for claim in claims:
+            notification = Notification(user = user, notif_id = claim.id, type = 'Toxic', text = claim.post.text, toxic_words = "shit, die")
+            notifications.append(notification)
+
+    Notification.objects.bulk_create(notifications)
             
 
 class Migration(migrations.Migration):

@@ -11,7 +11,7 @@ class User(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.CharField(max_length=50)
+    text = models.CharField(max_length=140)
     score = models.FloatField(default=None)
 
     def __str__(self):
@@ -41,7 +41,7 @@ class Notification(models.Model):
         (TOXIC, 'Toxic'),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.CharField(max_length=50)
+    text = models.CharField(max_length=140)
     toxic_words =  models.CharField(max_length=50)
     type = models.CharField(
         max_length=20,

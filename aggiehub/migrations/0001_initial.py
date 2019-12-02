@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='Post',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.CharField(max_length=50)),
+                ('text', models.CharField(max_length=140)),
                 ('score', models.FloatField(default=None)),
             ],
         ),
@@ -47,9 +47,9 @@ class Migration(migrations.Migration):
             name='Notification',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('text', models.CharField(max_length=50)),
+                ('text', models.CharField(max_length=140)),
                 ('toxic_words', models.CharField(max_length=50)),
-                ('type', models.CharField(choices=[('CLAIM_TOXIC', 'Claim Toxic'), ('CLAIM_NONTOXIC', 'Claim Non-Toxic'), ('TOXIC', 'Toxic')], default='TOXIC', max_length=20)),
+                ('type', models.CharField(choices=[('CLAIM_TOXIC', 'Claim Toxic'), ('CLAIM_NONTOXIC', 'Claim Non-Toxic'), ('RESOLVE_TOXIC', 'Resolve Toxic'), ('RESOLVE_NONTOXIC', 'Resolve Non-Toxic'), ('TOXIC', 'Toxic')], default='TOXIC', max_length=20)),
                 ('notif_id', models.IntegerField()),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
