@@ -70,11 +70,12 @@ Home
     </div>
     <div class="column notifications">
         <h4 id="Surveys" class="card-title"> Surveys </h4>
+        <h><b>We need your feedback for these posts. <br> We will use this to improve our toxic detector.</b></h><br>
         {% for survey in surveys %}
             <div class="row">
                 <div class="col s12 m12 card card-content black-text"> 
                     <p>
-                        We need your feedback for the post <b>"{{ survey.post.text }}"</b>. We will use this to improve our toxic detector.
+                        <b>"{{ survey.post.text }}"</b>. <br>
                         Click this to <a href="/survey/{{ survey.id }}/">take the survey</a>.
                     </p> 
                 </div>
