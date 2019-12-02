@@ -70,7 +70,13 @@
                                     '       <p> You have claimed the post "' + data.post + '" as ' + claimType + ' and it is under review.</p>' +
                                     '   </div>' +
                                     '</div>');
-                                $('#'+id).replaceWith("Already Reported");
+                                if(action == "report"){
+                                    $('#'+id).replaceWith("Already Reported");    
+                                } else {
+                                    str = $('#'+id).parent().text();
+                                    str = str.replace("Click this to claim non-toxicity.", "This post has already been claimed as non-toxic.")
+                                    $('#'+id).parent().text(str);
+                                }
                             }
                         } else {
                             $("#"+id).parent().parent().parent().parent().remove()

@@ -30,10 +30,14 @@ class Claim(models.Model):
 class Notification(models.Model):
     CLAIM_TOXIC = 'CLAIM_TOXIC'
     CLAIM_NONTOXIC = 'CLAIM_NONTOXIC'
+    RESOLVE_TOXIC = 'RESOLVE_TOXIC'
+    RESOLVE_NONTOXIC = 'RESOLVE_NONTOXIC'
     TOXIC = 'TOXIC'
     NOTIF_CHOICES = [
         (CLAIM_TOXIC, 'Claim Toxic'),
         (CLAIM_NONTOXIC, 'Claim Non-Toxic'),
+        (RESOLVE_TOXIC, 'Resolve Toxic'),
+        (RESOLVE_NONTOXIC, 'Resolve Non-Toxic'),
         (TOXIC, 'Toxic'),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE)

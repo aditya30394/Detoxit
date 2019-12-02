@@ -45,15 +45,23 @@ Home
             <div class="col s12 m12 card card-content black-text"> 
             {% if notification.type == "CLAIM_TOXIC" or notification.type == "CLAIM_NONTOXIC" %}
                 <p>
-                    You have claimed the post "{{ notification.text }}" as {% if notification.type == "CLAIM_TOXIC" %} toxic {% else %} non-toxic {%endif%} and it is under review.
+                    You have claimed the post "{{ notification.text }}" as {% if notification.type == "CLAIM_TOXIC" %}toxic{% else %}non-toxic{% endif %} and it is under review.
+                </p>
+            {% elif notification.type == "RESOLVE_TOXIC" or notification.type == "RESOLVE_NONTOXIC" %}
+                <p>
+                    The post "{{ notification.text }}" has been {% if notification.type == "RESOLVE_NONTOXIC" %}cleared as non-toxic{% else %}judged as toxic and will be removed{% endif %}.
                 </p>
             {% else %}
                 <p>
                     Your post "{{ notification.text }}" has been flagged as toxic.
                     <br>
-                    Following are the toxic words "{{ notification.toxic_words }}"
+                    Following are the toxic words "{{ notification.toxic_words }}".
                     <br>
-                    Click this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
+                    {% if notification.notif_id in already_claimed_notifications %}
+                        This post has already been claimed as non-toxic. 
+                    {% else %}
+                        Click this to <a id="{{ notification.notif_id}}" class="removeOrClaim" href="http://www.google.com">claim</a> non-toxicity.
+                    {% endif %}
                 </p> 
             {% endif %}
             </div>

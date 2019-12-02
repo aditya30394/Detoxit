@@ -1,4 +1,4 @@
-from aggiehub.models import Survey
+from aggiehub.models import Survey, Notification, Claim
 
 import keras
 from keras.preprocessing.text import Tokenizer
@@ -63,15 +63,8 @@ def format_survey_results(survey_posts):
 		surveys = Survey.objects.filter(post__exact = post, is_completed__exact = True)
 		median = median_value(surveys, "score")
 		
-		for survey in surveys:
-			survey.is_completed = True
-			survey.save()
-
 		if (post.isToxic() and median > 3) or (not post.isToxic() and median < 3) or median == 3:
-			claims = post.claim_set.all()
-			for claim in claims:
-				claim.resolved = True
-				claim.save()
+			print("Correctly guessed.")
 		else:
 			if median < 3:
 				post.score = 0.0
@@ -90,6 +83,22 @@ def format_survey_results(survey_posts):
 				else:
 					one_hot_encoding.append(0)
 			test.append(np.asarray(one_hot_encoding))
+		
+		all_surveys = Survey.objects.filter(post__exact = post)
+		for survey in all_surveys:
+			survey.is_completed = True
+			survey.save()
+	
+		resolve_type = Notification.RESOLVE_NONTOXIC
+		if post.isToxic():
+			resolve_type = Notification.RESOLVE_TOXIC
+		claims = post.claim_set.all()
+		for claim in claims:
+			claim.resolved = True
+			claim.save()
+			notification = Notification(user = claim.user, notif_id = claim.id, type = resolve_type, text = post.text)
+			notification.save()
+
 	return train, np.asarray(test)
 
 

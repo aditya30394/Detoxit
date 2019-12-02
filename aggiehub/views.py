@@ -46,10 +46,15 @@ def home(request):
         for claim in claims:
             if claim.post in posts:
                 already_claimed_posts.append(claim.post)
-
+        
+        already_claimed_notifications = []
         notifications = user.notification_set.all().order_by("-updated")
+        claim_notifications = notifications.filter(type__exact = Notification.CLAIM_NONTOXIC)
+        for notification in claim_notifications:
+            post = Claim.objects.get(pk=notification.notif_id).post
+            already_claimed_notifications.append(post.id)
         surveys = user.survey_set.filter(is_completed__exact = False).order_by('-id')
-        context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "claims": claims, "surveys":surveys, "already_claimed_posts":already_claimed_posts}
+        context = {"form": form, "user": user, "posts": posts, "notifications": notifications, "claims": claims, "surveys":surveys, "already_claimed_posts":already_claimed_posts, "already_claimed_notifications": already_claimed_notifications}
         return render(request, "aggiehub/home.html", context)
 
 
