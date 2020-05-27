@@ -1,4 +1,4 @@
-# Toxic Content detection on social media platforms
+# Toxic Content Detection On Social Media Platforms
 
 ## Motivation
 Cyberbullying and online abuse have been continuously rising at an alarming rate. This is detrimental to the mental state of teenagers and one of the biggest factors leading to depression. Manually determining the toxicity of the comments in the plethora of data generated on a daily basis is an impossible task. Automating the detection and censorship of such toxic comments by the social media platforms can go a long way in solving this issue. But detection of toxic comments is a very daunting task because of various factors such as context, perception, vocabulary etc.
